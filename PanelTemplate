@@ -1,0 +1,42 @@
+package BudgetBuddy;
+import javax.swing.*;
+
+public class MainPage extends JFrame{
+
+
+    public MainPage(){
+        setTitle("Budget Buddy");
+        setSize(1280, 720);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(null);
+        setVisible(true);
+
+        JPanel panel1 = new JPanel();
+        panel1.setBackground(getContentPane().getBackground());
+        //panel1.setBackground(Color.RED);
+        panel1.setBounds(0, 0, 395, 720);
+        add(panel1);
+
+        JPanel panel2 = new JPanel();
+        panel2.setBackground(getContentPane().getBackground());
+        //panel2.setBackground(Color.CYAN);
+        panel2.setBounds(395, 0, 525, 720);
+        add(panel2);
+
+        JPanel panel3 = new JPanel();
+        panel3.setBackground(getContentPane().getBackground());
+        //panel3.setBackground(Color.MAGENTA);
+        panel3.setBounds(panel1.getWidth()+panel2.getWidth(), 0, 360, 720);
+        add(panel3);
+
+
+
+
+
+    }
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(() -> new MainPage());
+    }
+}

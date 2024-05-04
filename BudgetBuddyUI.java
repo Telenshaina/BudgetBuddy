@@ -80,18 +80,20 @@ public class BudgetBuddyUI extends JFrame{
         budgetLabel.setBounds(30, 10, 100, 20);
         leftCenterPanel.add(budgetLabel);
 
-        JLabel pesoSign = new JLabel("₱");
+        JLabel pesoSign = new JLabel("  ₱");
         pesoSign.setFont(smallFont);
         pesoSign.setForeground(new Color(25,9,51,255));
-        pesoSign.setBounds(35, 35, 100, 20);
+        pesoSign.setBounds(35, 37, 100, 20);
         leftCenterPanel.add(pesoSign);
 
         RoundedTextField budgetTF = new RoundedTextField(5, 5, 5);
         budgetTF.setFont(new Font("Canva Sans", Font.BOLD, 12));
         budgetTF.setForeground(new Color(25,9,51,255));
         budgetTF.setBackground(Color.WHITE);
+        budgetTF.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
         budgetTF.setBounds(30, 30, 320, 35);
         leftCenterPanel.add(budgetTF);
+
 
         JLabel billLabel = new JLabel("BILL/EXPENSE NAME");
         billLabel.setFont(smallFont);
@@ -112,10 +114,17 @@ public class BudgetBuddyUI extends JFrame{
         costLabel.setBounds(30, 170, 100, 20);
         leftCenterPanel.add(costLabel);
 
+        JLabel pesoSign2 = new JLabel("  ₱");
+        pesoSign2.setFont(smallFont);
+        pesoSign2.setForeground(new Color(25,9,51,255));
+        pesoSign2.setBounds(35, 197, 100, 20);
+        leftCenterPanel.add(pesoSign2);
+
         RoundedTextField costTF = new RoundedTextField(5, 5, 5);
         costTF.setFont(new Font("Canva Sans", Font.BOLD, 12));
         costTF.setForeground(new Color(25,9,51,255));
         costTF.setBackground(Color.WHITE);
+        costTF.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
         costTF.setBounds(30, 190, 152, 35);
         leftCenterPanel.add(costTF);
 
@@ -178,7 +187,7 @@ public class BudgetBuddyUI extends JFrame{
         
         setVisible(true);
     }
-
+    
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> new BudgetBuddyUI());
     }

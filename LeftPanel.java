@@ -7,8 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
-public class BudgetBuddyUI extends JFrame{
-    public BudgetBuddyUI(){
+public class LeftPanel extends JFrame{
+    public leftPanel(){
 
         setTitle("Budget Buddy");
         setSize(1280, 720);
@@ -189,6 +189,6 @@ public class BudgetBuddyUI extends JFrame{
     }
     
     public static void main(String[] args){
-        SwingUtilities.invokeLater(() -> new BudgetBuddyUI());
+        SwingUtilities.invokeLater(() -> new LeftPanel());
     }
 }

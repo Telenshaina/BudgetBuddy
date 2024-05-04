@@ -91,7 +91,7 @@ public class BudgetBuddy extends JFrame{
         pesoSign.setBounds(35, 37, 100, 20);
         leftCenterPanel.add(pesoSign);
 
-        RoundedTextField budgetTF = new RoundedTextField(5, 5, 5);
+        RoundedTextField budgetTF = new RoundedTextField(5, 15,15);
         budgetTF.setFont(new Font("Canva Sans", Font.BOLD, 12));
         budgetTF.setForeground(new Color(25,9,51,255));
         budgetTF.setBackground(Color.WHITE);
@@ -105,7 +105,7 @@ public class BudgetBuddy extends JFrame{
         billLabel.setBounds(30, 90, 300, 20);
         leftCenterPanel.add(billLabel);
 
-        RoundedTextField billTF = new RoundedTextField(5, 5, 5);
+        RoundedTextField billTF = new RoundedTextField(5, 15, 15);
         billTF.setFont(new Font("Canva Sans", Font.BOLD, 12));
         billTF.setForeground(new Color(25,9,51,255));
         billTF.setBackground(Color.WHITE);
@@ -124,7 +124,7 @@ public class BudgetBuddy extends JFrame{
         pesoSign2.setBounds(35, 197, 100, 20);
         leftCenterPanel.add(pesoSign2);
 
-        RoundedTextField costTF = new RoundedTextField(5, 5, 5);
+        RoundedTextField costTF = new RoundedTextField(5, 15, 15);
         costTF.setFont(new Font("Canva Sans", Font.BOLD, 12));
         costTF.setForeground(new Color(25,9,51,255));
         costTF.setBackground(Color.WHITE);
@@ -139,7 +139,7 @@ public class BudgetBuddy extends JFrame{
         leftCenterPanel.add(dueDateLabel);
 
         JComboBox<String> dateCB = new JComboBox<>();
-        dateCB.setUI(new RoundedComboBox(5, 5)); 
+        dateCB.setUI(new RoundedComboBox(15, 15)); 
         dateCB.setFont(smallFont);
         dateCB.setForeground(new Color(25, 9, 51));
         dateCB.setBackground(Color.WHITE); // Background color
@@ -352,8 +352,6 @@ public class BudgetBuddy extends JFrame{
         
         setVisible(true);
     }
-
-
     
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> new BudgetBuddy());

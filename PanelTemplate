@@ -1,5 +1,6 @@
 package BudgetBuddy;
 import javax.swing.*;
+import java.awt.*;
 
 public class MainPage extends JFrame{
 
@@ -13,19 +14,19 @@ public class MainPage extends JFrame{
         setVisible(true);
 
         JPanel panel1 = new JPanel();
-        panel1.setBackground(getContentPane().getBackground());
+        panel1.setBackground(new Color(253,248,244));
         //panel1.setBackground(Color.RED);
         panel1.setBounds(0, 0, 395, 720);
         add(panel1);
 
         JPanel panel2 = new JPanel();
-        panel2.setBackground(getContentPane().getBackground());
+        panel2.setBackground(new Color(253,248,244));
         //panel2.setBackground(Color.CYAN);
         panel2.setBounds(395, 0, 525, 720);
         add(panel2);
 
         JPanel panel3 = new JPanel();
-        panel3.setBackground(getContentPane().getBackground());
+        panel3.setBackground(new Color(253,248,244));
         //panel3.setBackground(Color.MAGENTA);
         panel3.setBounds(panel1.getWidth()+panel2.getWidth(), 0, 360, 720);
         add(panel3);

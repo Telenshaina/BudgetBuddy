@@ -13,6 +13,12 @@ public class MainPage extends JFrame{
         setLayout(null);
         setVisible(true);
 
+        JPanel topPanel = new JPanel();
+        topPanel.setBackground(new Color(25,9,51));
+        //panel1.setBackground(Color.RED);
+        topPanel.setBounds(0, 0, 1280, 35);
+        add(topPanel);
+
         JPanel panel1 = new JPanel();
         panel1.setBackground(new Color(253,248,244));
         //panel1.setBackground(Color.RED);

@@ -1,20 +1,23 @@
-package BudgetBuddy;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import javax.swing.*;
 import javax.swing.table.*;
-
 import java.awt.font.TextAttribute;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BudgetBuddy extends JFrame{
     private JTextField budgetText, billsText, savedText, expensesText, totalSumField;
     private DefaultTableModel taskTable, taskTable1;
     private int rowCount;
+    private String budgetValue;
     public BudgetBuddy(){
 
         setTitle("Budget Buddy");
         setSize(1280, 720);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         rowCount = 0;
@@ -31,7 +34,7 @@ public class BudgetBuddy extends JFrame{
 
         Font xsFont = new Font("Canva Sans", Font.BOLD, 11);
         Map<TextAttribute, Object> attributesXSmall = (Map<TextAttribute, Object>) xsFont.getAttributes();
-        attributesXSmall.put(TextAttribute.TRACKING, 0.1);
+        attributesXSmall.put(TextAttribute.TRACKING, 0.4);
         Font xSmallFont = xsFont.deriveFont(attributesXSmall);
 
         JPanel leftPanel = new JPanel(new BorderLayout());
@@ -44,7 +47,7 @@ public class BudgetBuddy extends JFrame{
         leftPanel.add(leftUpperPanel, BorderLayout.NORTH);
 
         try {
-            ImageIcon logo = new ImageIcon("C:/Users/TATOY/Desktop/BudgetBuddy/testLogo.png");
+            ImageIcon logo = new ImageIcon("C:/Users/TATOY/Desktop/BudgetBuddy/budget.png");
             Image image = logo.getImage();
             Image scaledImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
             ImageIcon scaledLogo = new ImageIcon(scaledImage);
@@ -104,6 +107,31 @@ public class BudgetBuddy extends JFrame{
         budgetTF.setBounds(30, 30, 320, 35);
         leftCenterPanel.add(budgetTF);
 
+        budgetTF.addFocusListener(new FocusAdapter() {
+            boolean alreadyChecked = false;
+            @Override
+            public void focusGained(FocusEvent e){
+                if (!budgetTF.isEditable() && !alreadyChecked && !budgetTF.getText().isEmpty()){
+                    int response = JOptionPane.showConfirmDialog(budgetTF, "Buddy, are you changing your budget?", "Confirm change", JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.YES_OPTION) {
+                        budgetValue = budgetTF.getText();
+                        budgetTF.setEditable(true);
+                    } else {
+                        budgetTF.transferFocus();
+                    }
+                    alreadyChecked = true;
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (budgetTF.isEditable() && budgetTF.getText().isEmpty()) {
+                    budgetTF.setText(budgetValue);
+                }
+                alreadyChecked = false;
+            }
+        }); 
+
         JLabel billLabel = new JLabel("BILL/EXPENSE NAME");
         billLabel.setFont(smallFont);
         billLabel.setForeground(new Color(25,9,51,255));
@@ -114,6 +142,7 @@ public class BudgetBuddy extends JFrame{
         billTF.setFont(new Font("Canva Sans", Font.BOLD, 12));
         billTF.setForeground(new Color(25,9,51,255));
         billTF.setBackground(Color.WHITE);
+        billTF.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
         billTF.setBounds(30, 110, 320, 35);
         leftCenterPanel.add(billTF);
 
@@ -151,16 +180,14 @@ public class BudgetBuddy extends JFrame{
         dateCB.setBounds(195, 190, 152, 35);
         leftCenterPanel.add(dateCB);
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("    MM/dd/yyyy", Locale.ENGLISH);
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(2024, Calendar.JANUARY, 1);
-        int numberOfDays = 730;
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("    MM/dd/yyyy");
+        int numberOfDays = 1825;
 
+        LocalDate currentDate = today;
         for (int i = 0; i < numberOfDays; i++) {
-            java.util.Date date = calendar.getTime();
-            String formattedDate = dateFormatter.format(date);
-            dateCB.addItem(formattedDate);
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            dateCB.addItem(currentDate.format(formatter));
+            currentDate = currentDate.plusDays(1);
         }
 
         JPanel leftLowerPanel = new JPanel(null);
@@ -180,22 +207,30 @@ public class BudgetBuddy extends JFrame{
             String budgetInput = budgetTF.getText().replace(",", "");
 
             if (budgetInput.isEmpty() || !isNumeric(budgetInput)) {
-                JOptionPane.showMessageDialog(null, "Please enter a valid budget", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Buddy, you have to enter your budget.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             } else if (billInput.isEmpty() || costInput.isEmpty() || !isNumeric(costInput)) {
                 if (billInput.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please enter a bill/expense name", "Missing Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Buddy, I think you forgot to enter the bill/expense name.", "Missing Input", JOptionPane.ERROR_MESSAGE);
                 } else if (costInput.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Please enter the cost", "Missing Input", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Buddy, please enter how much it is.", "Missing Input", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Please enter a valid number", "Input Mismatch", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Buddy, please enter a valid number.", "Input Mismatch", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 billInput = capitalizeFirstLetter(billInput);
                 costInput = "₱ " + costInput;
                 String dateInput = (String) dateCB.getSelectedItem();
 
-                taskTable.insertRow(0, new Object[]{billInput, dateInput, costInput});
-                rowCount++;
+                boolean rowFilled = false;
+                for (int i = 0; i < taskTable.getRowCount(); i++){
+                    if (taskTable.getValueAt(i, 0) == null){
+                        taskTable.setValueAt(billInput, i, 0);
+                        taskTable.setValueAt(dateInput, i, 1);
+                        taskTable.setValueAt(costInput, i, 2);
+                        rowFilled = true;
+                        break;
+                    }
+                }
                 sortTaskTableByDate();
 
                 billTF.setText("");
@@ -213,7 +248,7 @@ public class BudgetBuddy extends JFrame{
             String budgetInput = budgetTF.getText().replace(",", "");
 
             if (budgetInput.isEmpty() || !isNumeric(budgetInput)) {
-                JOptionPane.showMessageDialog(null, "Please enter a valid budget", "Invalid Budget", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Buddy, please enter a valid budget.", "Invalid Budget", JOptionPane.ERROR_MESSAGE);
             } else {
                 double totalCost = 0.0;
                 for (int i = 0; i < taskTable.getRowCount(); i++) {
@@ -224,7 +259,7 @@ public class BudgetBuddy extends JFrame{
                     }
                 }
                 double budgetValue = Double.parseDouble(budgetInput);
-                double savedValue = totalCost - budgetValue;
+                double savedValue = budgetValue - totalCost;
                 budgetText.setText("₱ " + budgetInput);
                 billsText.setText("₱ " + totalCost);
                 savedText.setText("₱ " + savedValue);
@@ -237,7 +272,6 @@ public class BudgetBuddy extends JFrame{
                     double expensesValue = Double.parseDouble(totalSumText);
                     double difference = budgetValue - (billsValue + expensesValue);
 
-                    // Update savedText with the difference
                     savedText.setText("₱ " + String.format("%.2f", difference));
                 }
             }
@@ -380,25 +414,31 @@ public class BudgetBuddy extends JFrame{
         rightPanel.add(expPanel);
 
         //ITEM
+        JLabel itemLabel = new JLabel("ITEM");
+        itemLabel.setFont(xSmallFont);
+        itemLabel.setForeground(new Color(25, 9, 51, 255));
+        itemLabel.setBounds(20, 540, 100, 20);
+        rightPanel.add(itemLabel);
+
         RoundedTextField itemBox = new RoundedTextField(5, 15, 15);
         itemBox.setFont(new Font("Canva Sans", Font.PLAIN, 12));
         itemBox.setForeground(new Color(25,9,51,255));
         itemBox.setBackground(Color.WHITE);
         itemBox.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        itemBox.setBounds(17, 550, 300, 28);//10, 50, 300, 600
+        itemBox.setBounds(17, 560, 300, 28);
         rightPanel.add(itemBox);
 
-        JLabel itemLabel = new JLabel("I T E M");
-        itemLabel.setFont(xSmallFont);
-        itemLabel.setForeground(new Color(25, 9, 51, 255));
-        itemLabel.setBounds(20, 530, 100, 20);
-        rightPanel.add(itemLabel);
-
         //COST
-        JLabel pesoSignCost = new JLabel("  ₱");
+        JLabel costL = new JLabel("COST");
+        costL.setFont(xSmallFont);
+        costL.setForeground(new Color(25, 9, 51, 255));
+        costL.setBounds(20, 600, 85, 20);
+        rightPanel.add(costL);
+
+        JLabel pesoSignCost = new JLabel(" ₱");
         pesoSignCost.setFont(xSmallFont);
         pesoSignCost.setForeground(new Color(25,9,51,255));
-        pesoSignCost.setBounds(20, 593, 85, 28);
+        pesoSignCost.setBounds(20, 619, 85, 30);
         rightPanel.add(pesoSignCost);
 
         RoundedTextField costBox = new RoundedTextField(5, 15, 15);
@@ -406,56 +446,47 @@ public class BudgetBuddy extends JFrame{
         costBox.setForeground(new Color(25,9,51,255));
         costBox.setBackground(Color.WHITE);
         costBox.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
-        costBox.setBounds(17, 595, 110, 28);//10, 50, 300, 600
+        costBox.setBounds(17, 620, 130, 30);//10, 50, 300, 600
         rightPanel.add(costBox);
 
-        JLabel costL = new JLabel("C O S T");
-        costL.setFont(xSmallFont);
-        costL.setForeground(new Color(25, 9, 51, 255));
-        costL.setBounds(20, 575, 85, 20);
-        rightPanel.add(costL);
-
-
         //SUBTRACT BUDGET
-        RoundedButton subBudget = new RoundedButton("SUBTRACT TO BUDGET", 40, 40);
+        RoundedButton subBudget = new RoundedButton("SUBTRACT TO BUDGET", 30, 30);
         subBudget.setFont(new Font("Canva Sans", Font.BOLD, (int)10.7));
         subBudget.setForeground(new Color(25,9,51,255));
         subBudget.setBackground(new Color(255,219,195,255));
-        subBudget.setBounds(140, 595, 150, 28);
+        subBudget.setBounds(164, 618, 150, 31);
         rightPanel.add(subBudget);
+
         //TOTAL PANEL
         JPanel totalPanel = new JPanel();
         totalPanel.setForeground(new Color(25,9,51));
         totalPanel.setFont(new Font("Canva Sans", Font.BOLD, 12));
         totalPanel.setBackground(new Color(255,219,195,255));
         totalPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
-        totalPanel.setBounds(15, 490, 320, 34);
+        totalPanel.setBounds(15, 490, 318, 34);
 
-        JLabel totalLabel = new JLabel("T O T A L:  " );
+        JLabel totalLabel = new JLabel("T O T A L :  " );
         totalLabel.setFont(smallFont);
         totalLabel.setForeground(new Color(25, 9, 51, 255));
-        totalLabel.setBounds(0, 50, 300, 20);
+        totalLabel.setBounds(0, 0, 300, 20);
         totalPanel.add(totalLabel);
-
 
         JLabel costSum = new JLabel("" );
         costSum.setFont(smallFont);
         costSum.setForeground(new Color(25, 9, 51, 255));
         costSum.setBounds(10, 50, 300, 20);
 
-
-
         totalSumField = new JTextField(10);
         totalSumField.setEditable(false);
         totalSumField.setOpaque(false);
-        totalSumField.setBorder(BorderFactory.createEmptyBorder());// Make the field non-editable
-        totalSumField.setForeground(new Color(25, 9, 51)); // Set foreground color
-        totalSumField.setBackground(new Color(255, 219, 195)); // Set background color
+        totalSumField.setBorder(BorderFactory.createEmptyBorder());
+        totalSumField.setForeground(new Color(25, 9, 51));
+        totalSumField.setBackground(new Color(255, 219, 195));
         totalSumField.setFont(new Font("Canva Sans", Font.BOLD, 12));
         totalPanel.add(totalSumField);
         rightPanel.add(totalPanel);
 
-        //tavle
+        //table
         taskTable1 = new DefaultTableModel();
         taskTable1.addColumn("ITEM");
         taskTable1.addColumn("COST");
@@ -484,8 +515,6 @@ public class BudgetBuddy extends JFrame{
         column1.setCellEditor(new DefaultCellEditor(new JTextField()));
         column2.setCellEditor(new DefaultCellEditor(new JTextField()));
 
-
-
         JScrollPane scrollPane2 = new JScrollPane(table);
         scrollPane2.setBounds(15, 80, 320, 412);
 
@@ -498,7 +527,6 @@ public class BudgetBuddy extends JFrame{
 
 
         //bottom part
-
         RoundedButton enterButton = new RoundedButton("IGNORE THIS", 40, 40);
 
         enterButton.setFont(new Font("Canva Sans", Font.BOLD, 12));
@@ -542,21 +570,13 @@ public class BudgetBuddy extends JFrame{
                 }
             }
         });
-
-
-
         itemBox.addActionListener(e -> enterButton.doClick());
         costBox.addActionListener(e -> enterButton.doClick());
         rightPanel.add(enterButton);
-
-
-
-
         setVisible(true);
     }
 
     private String capitalizeFirstLetter(String str) {
-
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
 

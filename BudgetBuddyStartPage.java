@@ -35,7 +35,7 @@ public class BudgetBuddyStartPage extends JFrame {
 
         // si buddy Budget, guys B-)
         try {
-            ImageIcon logo = new ImageIcon("C:/Users/TATOY/Desktop/BudgetBuddy/budget(2).png");
+            ImageIcon logo = new ImageIcon("C:/Users/TATOY/Desktop/BudgetBuddy/budget(2).png"); //change to the path where you put the image
             Image image = logo.getImage();
             
             Image scaledImage = image.getScaledInstance(650, 650, Image.SCALE_SMOOTH);
@@ -108,14 +108,13 @@ public class BudgetBuddyStartPage extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                Graphics2D g2d = (Graphics2D) g;  // Convert to Graphics2D
-                g2d.setColor(new Color(25, 9, 51, 255));  // Set line color
-                g2d.setStroke(new BasicStroke(3));  // Set stroke thickness
-
-                g2d.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2);  // Draw a thicker horizontal line
+                Graphics2D g2d = (Graphics2D) g;  
+                g2d.setColor(new Color(25, 9, 51, 255)); 
+                g2d.setStroke(new BasicStroke(3));  
+                g2d.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2); 
             }
         };
-        horizontalLineTop.setBounds(35, 40, 1200, 3);  // x, y, width, height
+        horizontalLineTop.setBounds(35, 40, 1200, 3);
 
         JPanel horizontalLineBottom = new JPanel() {
             @Override

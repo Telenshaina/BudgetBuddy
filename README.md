@@ -13,6 +13,8 @@ Budget, your Buddy, will take control of your finances with ease and confidence.
 - **Budget Management**: Input and track your monthly budget.
 - **Expense Tracking**: Add and manage multiple expenses with names, costs, and due dates.
 - **Expense Summaries**: Generate summaries to see total expenses, bills, and savings.
+- **Bills Sorting**: Sort your bills and expenses using Merge Sort.
+- **Predict Future Expense**: Predict percentage of your current and future possible spending using Linear Regression.
 
 ## Developers
 - [Mercado, John Keith] (https://github.com/KeithMercado)

@@ -17,6 +17,6 @@ Budget, your Buddy, will take control of your finances with ease and confidence.
 - **Predict Future Expense**: Predict percentage of your current and future possible spending using Linear Regression.
 
 ## Developers
-- [Mercado, John Keith] (https://github.com/KeithMercado)
-- [Tatoy, Louise Andrea] (https://github.com/AndreaTatoy)
-- [Telen, Shaina Blessi Meir] (https://github.com/Telenshaina)
+- [Mercado, John Keith](https://github.com/KeithMercado)
+- [Tatoy, Louise Andrea](https://github.com/AndreaTatoy)
+- [Telen, Shaina Blessi Meir](https://github.com/Telenshaina)
